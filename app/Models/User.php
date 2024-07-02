@@ -46,6 +46,11 @@ final class User extends Authenticatable
         'remember_token',
     ];
 
+
+    public function setIsMarketingAttribute($value)
+    {
+        $this->attributes['is_marketing'] = $value ?? 0;
+    }
     public function getRouteKeyName(): string
     {
         return 'uuid';
@@ -73,9 +78,11 @@ final class User extends Authenticatable
         });
     }
 
+
+
     protected static function boot()
     {
         parent::boot();
-        UuidTrait::initUuid();
+        self::initUuid();
     }
 }
