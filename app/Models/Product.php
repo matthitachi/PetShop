@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 final class Product extends Model
 {
     use HasFactory;
+    use UuidTrait;
+
 
     protected $fillable = ['uuid', 'title', 'price', 'description', 'metadata', 'category_uuid'];
 
@@ -20,6 +22,6 @@ final class Product extends Model
     protected static function boot()
     {
         parent::boot();
-        UuidTrait::initUuid();
+        self::initUuid();
     }
 }
