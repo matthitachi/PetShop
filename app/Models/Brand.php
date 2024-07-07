@@ -23,7 +23,8 @@ final class Brand extends Model
     protected static function boot()
     {
         parent::boot();
-        UuidTrait::initUuid();
+        self::initUuid();
+
 
         self::creating(function (self $model) {
             $model->setAttribute('slug', Str::slug($model->title));
