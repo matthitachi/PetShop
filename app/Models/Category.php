@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 final class Category extends Model
 {
     use HasFactory;
+    use UuidTrait;
 
     protected $fillable = ['title'];
 
@@ -22,7 +23,7 @@ final class Category extends Model
     {
         parent::boot();
 
-        UuidTrait::initUuid();
+        self::initUuid();
 
         self::creating(function (self $model) {
             $model->setAttribute('slug', Str::slug($model->title));
