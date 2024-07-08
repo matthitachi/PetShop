@@ -26,41 +26,258 @@ class BrandController extends Controller
         $this->paginator = $paginator;
     }
 
-    public function index(Request $request, Paginator $paginator): JsonResponse
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/brands",
+     *     tags={"Brands"},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="limit",
+     *         in="query",
+     *         description="Number of items per page",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="sortBy",
+     *         in="query",
+     *         description="Number of items per page",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *      @OA\Parameter(
+     *         name="desc",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="boolean"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Page not found"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Unprocessable Entity"
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Internal server error"
+     *     )
+     * )
+     */
+    public function index(Request $request): JsonResponse
     {
         $brandQuery = Brand::query();
         $paginatedResults = $this->paginator->paginate($request, $brandQuery);
 
-        return response()->json(BrandResource::collection($paginatedResults), Response::HTTP_OK);
+        return response()->formatted(true,BrandResource::collection($paginatedResults), Response::HTTP_OK);
     }
 
-
+    /**
+     * @OA\Post(
+     *     path="/api/v1/brand",
+     *     tags={"Brands"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="title",
+     *                     type="string",
+     *                     description="title",
+     *                 ),
+     *                 required={"title"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Page not found"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Unprocessable Entity"
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Internal server error"
+     *     )
+     * )
+     *
+     * @throws Throwable
+     */
     public function store(BradCreateRequest $request): JsonResponse
     {
         $brand = Brand::create($request->validated());
 
-        return response()->json(new BrandResource($brand), Response::HTTP_OK);
+        return response()->formatted(true, new BrandResource($brand), Response::HTTP_OK);
     }
 
-
+    /**
+     * @OA\Get(
+     *     path="/api/v1/brand/{uuid}",
+     *     tags={"Brands"},
+     *     @OA\Parameter(
+     *         name="uuid",
+     *         in="path",
+     *         description="UUID parameter",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Page not found"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Unprocessable Entity"
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Internal server error"
+     *     )
+     * )
+     */
     public function show(Brand $brand): JsonResponse
     {
-        return response()->json(new BrandResource($brand), Response::HTTP_OK);
+        return response()->formatted(true, new BrandResource($brand), Response::HTTP_OK);
     }
 
-
+    /**
+     * @OA\Put(
+     *     path="/api/v1/brand/{uuid}",
+     *     tags={"Brands"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="uuid",
+     *         in="path",
+     *         description="UUID parameter",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="title",
+     *                     type="string",
+     *                     description="User Title",
+     *                 ),
+     *                 required={"title"}
+     *             )
+     *         )
+     *    ),
+     *    @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Page not found"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Unprocessable Entity"
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Internal server error"
+     *     )
+     * )
+     * )
+     */
     public function update(BrandUpdateRequest $request, Brand $brand): JsonResponse
     {
         $brand->update($request->safe()->all());
 
-        return response()->json(new BrandResource($brand), Response::HTTP_OK);
+        return response()->formatted(true, new BrandResource($brand), Response::HTTP_OK);
     }
 
-
+    /**
+     * @OA\Delete(
+     *     path="/api/v1/brand/{uuid}",
+     *     tags={"Brands"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="uuid",
+     *         in="path",
+     *         description="UUID parameter",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Page not found"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Unprocessable Entity"
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Internal server error"
+     *     )
+     * )
+     */
     public function destroy(Brand $brand): JsonResponse
     {
         $brand->delete();
 
-        return response()->json([], Response::HTTP_OK);
+        return response()->formatted(true, [], Response::HTTP_OK);
     }
 }

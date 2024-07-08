@@ -23,6 +23,7 @@ final class UserUpdateRequest extends FormRequest
         return [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
+            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
             'avatar' => 'nullable',
             'email' => 'email|required|unique:users',
             'address' => 'required|string',

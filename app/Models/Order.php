@@ -11,8 +11,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 final class Order extends Model
 {
     use HasFactory;
+    use UuidTrait;
+
 
     protected $fillable = ['order_status_id', 'payment_id', 'products', 'address', 'amount'];
+    protected $casts = [
+        'products' => 'array',
+    ];
 
     public function user(): BelongsTo
     {
@@ -24,9 +29,9 @@ final class Order extends Model
         return $this->hasOne(OrderStatus::class);
     }
 
-    public function payment(): HasOne
+    public function payment(): BelongsTo
     {
-        return $this->hasOne(Payment::class);
+        return $this->belongsTo(Payment::class);
     }
 
     public function getRouteKeyName()
@@ -37,6 +42,7 @@ final class Order extends Model
     protected static function boot()
     {
         parent::boot();
-        UuidTrait::initUuid();
+        self::initUuid();
+
     }
 }

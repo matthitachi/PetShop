@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 final class Post extends Model
 {
     use HasFactory;
+    use UuidTrait;
+
 
     public function getRouteKeyName(): string
     {
@@ -18,6 +20,6 @@ final class Post extends Model
     protected static function boot()
     {
         parent::boot();
-        UuidTrait::initUuid();
+        self::initUuid();
     }
 }

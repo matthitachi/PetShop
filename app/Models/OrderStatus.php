@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 final class OrderStatus extends Model
 {
     use HasFactory;
+    use UuidTrait;
+
 
     protected $fillable = ['uuid', 'title'];
 
@@ -20,6 +22,6 @@ final class OrderStatus extends Model
     protected static function boot()
     {
         parent::boot();
-        UuidTrait::initUuid();
+        self::initUuid();
     }
 }

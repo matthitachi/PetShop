@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 final class Payment extends Model
 {
     use HasFactory;
+    use UuidTrait;
+
 
     protected $fillable = ['type', 'details'];
 
@@ -20,6 +22,6 @@ final class Payment extends Model
     protected static function boot()
     {
         parent::boot();
-        UuidTrait::initUuid();
+        self::initUuid();
     }
 }
