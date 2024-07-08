@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\Auth\AuthService;
+use App\Services\Auth\JWTService;
+use App\Services\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app->bind(JWTService::class, function () {
+            return new JWTService();
+        });
+
+        $this->app->bind(AuthService::class, function ($app) {
+            return new AuthService($app->make(JWTService::class));
+        });
     }
 }
