@@ -21,6 +21,7 @@ final class ProductController extends Controller
 
     public function __construct(Paginator $paginator)
     {
+        $this->middleware(['jwt', 'role:user'])->except(['index', 'show']);
         $this->paginator = $paginator;
     }
 

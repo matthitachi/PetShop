@@ -170,7 +170,9 @@ class UserController extends Controller
             return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
         }
         $user = User::query()->where('id', Auth::id())->where('is_admin', 0)->firstOrFail();
-
+        if(!$user){
+            return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
+        }
         try {
             $token = $this->service->login($user);
         } catch (\ErrorException|Throwable $e) {

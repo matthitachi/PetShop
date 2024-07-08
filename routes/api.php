@@ -41,25 +41,17 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-    // Brand routes
-    Route::prefix('brand')->name('brand.')->group(function () {
-        Route::post('create', [AdminController::class, 'create'])->name('create');
-    });
-
     // Public brand routes
     Route::get('brands', [BrandController::class, 'index']);
-    Route::apiResource('brand', BrandController::class)
-        ->middleware(['jwt', 'role:user'])->except(['index']);
+    Route::apiResource('brand', BrandController::class)->except(['index']);
 
     // Category routes
     Route::get('categories', [CategoryController::class, 'index']);
-    Route::apiResource('category', CategoryController::class)
-        ->middleware(['jwt', 'role:user'])->except(['index']);
+    Route::apiResource('category', CategoryController::class)->except(['index']);
 
     // Product routes
     Route::get('products', [ProductController::class, 'index']);
-    Route::apiResource('product', ProductController::class)
-        ->middleware(['jwt', 'role:user'])->except(['index']);
+    Route::apiResource('product', ProductController::class)->except(['index']);
 
 });
 

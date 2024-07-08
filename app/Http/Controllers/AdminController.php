@@ -168,8 +168,10 @@ class AdminController extends Controller
         if ( !Auth::attempt($request->safe()->only('email', 'password'))) {
             return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
         }
-        $user = User::where('id', Auth::id())->where('is_admin', 1)->firstOrFail();
-
+        $user = User::where('id', Auth::id())->where('is_admin', 1)->first();
+        if(!$user){
+            return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
+        }
         try {
             $token = $this->service->login($user);
         } catch (\ErrorException|Throwable $e) {
