@@ -13,6 +13,25 @@ use Illuminate\Notifications\Notifiable;
 
 final class User extends Authenticatable
 {
+    /**
+     * App\Models\User.
+     *
+     * @property int $id
+     * @property string $uuid
+     * @property string $first_name
+     * @property string $last_name
+     * @property int $is_admin
+     * @property string $email
+     * @property \Illuminate\Support\Carbon|null $email_verified_at
+     * @property string $password
+     * @property string|null $avatar
+     * @property string $address
+     * @property string $phone_number
+     * @property int $is_marketing
+     * @property \Illuminate\Support\Carbon|null $created_at
+     * @property \Illuminate\Support\Carbon|null $updated_at
+     * @property string|null $last_login
+     **/
     use HasFactory;
     use Notifiable;
     use UuidTrait;

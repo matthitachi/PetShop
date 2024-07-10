@@ -10,20 +10,20 @@ class ProductResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
-            'title' => $this->title,
-            'price' => $this->price,
-            'description' => $this->description,
-            'image' => new FileResource($this->getImageFile()),
-            'category' => new CategoryResource($this->category),
-            'brand' => new BrandResource($this->getBrand()),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'uuid' => $this->resource->uuid,
+            'title' => $this->resource->title,
+            'price' => $this->resource->price,
+            'description' => $this->resource->description,
+            'category' => new CategoryResource($this->resource->category),
+            'metadata' => json_decode($this->resource->metadata, true),
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

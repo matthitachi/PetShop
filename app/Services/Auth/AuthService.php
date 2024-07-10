@@ -25,7 +25,9 @@ final class AuthService
 
     /**
      * @param array $params
-     * @param string $resource
+     * @param int $isAdmin
+     * @return JsonResource
+     * @throws \ErrorException
      */
     public function create(array $params, $isAdmin = 0): JsonResource
     {
@@ -57,7 +59,9 @@ final class AuthService
     }
 
     /**
-     * @throws \Exception|\Throwable
+     * @param User $user
+     * @return Token
+     * @throws \ErrorException
      */
     public function login(User $user): Token
     {

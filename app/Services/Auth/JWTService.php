@@ -62,16 +62,18 @@ class JWTService
 
     /**
      * @param string $token
-     * @return Token
+     * @return UnencryptedToken
      */
-    public function parseToken(string $token): Token
+    public function parseToken(string $token): UnencryptedToken
     {
         if ($token === '') {
             throw new InvalidTokenStructure('Token cannot be empty');
         }
-        $parser = new Parser(new JoseEncoder());
-
-        return $parser->parse($token);
+        $parsedToken = (new Parser(new JoseEncoder()))->parse($token);
+        if (! $parsedToken instanceof UnencryptedToken) {
+            throw InvalidTokenStructure::missingClaimsPart();
+        }
+        return $parsedToken;
     }
 
 

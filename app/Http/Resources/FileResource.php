@@ -10,18 +10,19 @@ class FileResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
-            'name' => $this->name,
-            'path' => $this->path,
-            'size' => $this->size,
-            'type' => $this->type,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'uuid' => $this->resource->uuid,
+            'name' => $this->resource->name,
+            'path' => $this->resource->path,
+            'size' => $this->resource->size,
+            'type' => $this->resource->type,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

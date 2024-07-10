@@ -22,11 +22,11 @@ final class Role
      */
     public function handle(Request $request, Closure $next, $role = false): Response {
         $user = User::query()->where('id',Auth::id())->firstOrFail();
-        if ($role === 'admin' && $user->is_admin) {
+        if ($role == 'admin' && $user->is_admin) {
             return $next($request);
         }
 
-        if ($role === 'user' && !$user->is_admin) {
+        if ($role == 'user' && !$user->is_admin) {
             return $next($request);
         }
 

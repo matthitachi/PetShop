@@ -10,24 +10,25 @@ class UserResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'email' => $this->email,
-            'email_verified_at' => $this->email_verified_at,
-            'address' => $this->address,
-            'avatar' => $this->avatar,
-            'phone_number' => $this->phone_number,
-            'is_marketing' => $this->is_marketing,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'last_login_at' => $this->last_login_at,
-            'token' => $this->whenNotNull($this->token),
+            'uuid' => $this->resource->uuid,
+            'first_name' => $this->resource->first_name,
+            'last_name' => $this->resource->last_name,
+            'email' => $this->resource->email,
+            'email_verified_at' => $this->resource->email_verified_at,
+            'address' => $this->resource->address,
+            'avatar' => $this->resource->avatar,
+            'phone_number' => $this->resource->phone_number,
+            'is_marketing' => $this->resource->is_marketing,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
+            'last_login_at' => $this->resource->last_login_at,
+            'token' => $this->whenNotNull($this->resource->token),
         ];
     }
 }

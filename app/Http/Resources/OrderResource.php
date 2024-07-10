@@ -10,22 +10,23 @@ class OrderResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
-            'products' => $this->products,
-            'address' => $this->address,
-            'delivery_fee' => $this->delivery_fee,
-            'amount' => $this->amount,
-            'user' => new UserResource($this->user),
-            'order_status' => new OrderStatusResource($this->orderStatus),
-            'payment' => new PaymentResource($this->payment),
-            'shipped_at' => $this->shipped_at,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'uuid' => $this->resource->uuid,
+            'products' => $this->resource->products,
+            'address' => $this->resource->address,
+            'delivery_fee' => $this->resource->delivery_fee,
+            'amount' => $this->resource->amount,
+            'user' => new UserResource($this->resource->user),
+            'order_status' => new OrderStatusResource($this->resource->orderStatus),
+            'payment' => new PaymentResource($this->resource->payment),
+            'shipped_at' => $this->resource->shipped_at,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

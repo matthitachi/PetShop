@@ -16,6 +16,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -169,7 +170,7 @@ class UserController extends Controller
         if ( !Auth::attempt($request->safe()->only('email', 'password'))) {
             return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
         }
-        $user = User::query()->where('id', Auth::id())->where('is_admin', 0)->firstOrFail();
+        $user = User::query()->where('id', Auth::id())->where('is_admin', 0)->first();
         if(!$user){
             return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
         }
