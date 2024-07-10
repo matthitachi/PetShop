@@ -19,7 +19,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
                 'data' => $data,
                 'error' => $error,
                 'errors' => $errors,
-                'trace' => $trace,
+//                'trace' => $trace,
             ], $status);
         });
     }

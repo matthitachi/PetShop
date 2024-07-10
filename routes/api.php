@@ -33,10 +33,10 @@ Route::prefix('v1')->group(function () {
         Route::get('logout', [AdminController::class, 'logout'])->name('logout');
 
         Route::middleware(['jwt', 'role:admin'])->group(function () {
-            Route::name('user.')->group(function () {
+            Route::name('admin.')->group(function () {
                 Route::get('user-listing', [AdminController::class, 'index'])->name('index');
-                Route::put('user-listing/{user}', [AdminController::class, 'update'])->name('update');
-                Route::delete('user-listing/{user}', [AdminController::class, 'destroy'])->name('delete');
+                Route::put('user-edit/{user}', [AdminController::class, 'update'])->name('update');
+                Route::delete('user-delete/{user}', [AdminController::class, 'destroy'])->name('delete');
             });
         });
     });

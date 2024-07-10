@@ -13,20 +13,31 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
-final class CategoryController extends Controller
+final class CategoryController extends Controller implements HasMiddleware
 {
     private Paginator $paginator;
 
     public function __construct(Paginator $paginator)
     {
-        $this->middleware(['jwt', 'role:user'])->except(['index', 'show']);
         $this->paginator = $paginator;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('jwt', except: ['index', 'show']),
+            new Middleware('role:user', except: ['index', 'show']),
+        ];
+    }
 
     /**
      * @OA\Get(
@@ -144,7 +155,7 @@ final class CategoryController extends Controller
     {
         $category = Category::create($request->validated());
 
-        return response()->json(new CategoryResource($category), Response::HTTP_OK);
+        return response()->formatted(1, new CategoryResource($category), Response::HTTP_OK);
     }
 
     /**
@@ -182,7 +193,7 @@ final class CategoryController extends Controller
      */
     public function show(Category $category): JsonResponse
     {
-        return response()->json(new CategoryResource($category), Response::HTTP_OK);
+        return response()->formatted(1, new CategoryResource($category), Response::HTTP_OK);
     }
 
     /**
@@ -238,7 +249,7 @@ final class CategoryController extends Controller
     {
         $category->update($request->validated());
 
-        return response()->json(new CategoryResource($category), Response::HTTP_OK);
+        return response()->formatted(1, new CategoryResource($category), Response::HTTP_OK);
     }
 
     /**
@@ -279,6 +290,6 @@ final class CategoryController extends Controller
     {
         $category->delete();
 
-        return response()->json([], Response::HTTP_OK);
+        return response()->formatted(1, [], Response::HTTP_OK);
     }
 }

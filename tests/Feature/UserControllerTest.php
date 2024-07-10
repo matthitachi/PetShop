@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\AuthTest;
+use Tests\Traits\AuthTest;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -15,6 +15,7 @@ class UserControllerTest extends TestCase
      */
 
     use AuthTest;
+    protected string $baseUrl = "/api/v1/user";
 
     public function test_example(): void
     {
@@ -23,8 +24,8 @@ class UserControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /** @test */
-    public function can_create_a_user()
+    #[Test]
+    public function test_can_create_a_user()
     {
         $userData = [
             'first_name' => fake()->name(),
@@ -35,12 +36,12 @@ class UserControllerTest extends TestCase
             'phone_number' => fake()->phoneNumber(),
         ];
 
-        $response = $this->postJson('/api/user/create', $userData);
+        $response = $this->postJson("$this->baseUrl/create", $userData);
 
         $response->assertStatus(200);
         $response->assertJson([
             'data' => [
-                'name' => $userData['first_name'],
+                'first_name' => $userData['first_name'],
                 'email' => $userData['email'],
             ]
         ]);
@@ -50,8 +51,8 @@ class UserControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function can_login_a_user()
+    #[Test]
+    public function test_can_login_a_user()
     {
         $user = $this->getUser();
         $userData = [
@@ -59,7 +60,7 @@ class UserControllerTest extends TestCase
             'password' => 'userpassword',
         ];
 
-        $response = $this->postJson('/api/user/login', $userData);
+        $response = $this->postJson("$this->baseUrl/login", $userData);
 
         $response->assertStatus(200);
         $response->assertJson(['data' => ['token' => true]]);
@@ -69,38 +70,38 @@ class UserControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function can_show_a_user()
+    #[Test]
+    public function test_can_show_a_user()
     {
         $user = $this->getUser();
 
-        $response = $this->getJson("/api/user");
+        $response = $this->authenticatedRequest($user)->getJson("$this->baseUrl");
 
         $response->assertStatus(200);
         $response->assertJson([
             'data' => [
-                'id' => $user->id,
-                'name' => $user->first_name,
+                'uuid' => $user->uuid,
+                'first_name' => $user->first_name,
                 'email' => $user->email,
             ]
         ]);
     }
-    /** @test */
-    public function can_list_user_orders()
+    #[Test]
+    public function test_can_list_user_orders()
     {
         $user = $this->getUser();
 
-        $response = $this->authenticatedRequest($user)->getJson("/api/user/orders");
+        $response = $this->authenticatedRequest($user)->getJson("$this->baseUrl/orders");
 
         $response->assertStatus(200);
     }
 
-    /** @test */
-    public function can_delete_a_user()
+    #[Test]
+    public function test_can_delete_a_user()
     {
-        $user = User::factory()->create();
+        $user = $this->getUser();
 
-        $response = $this->authenticatedRequest($this->getUser())->deleteJson("/api/user/{$user->uuid}");
+        $response = $this->authenticatedRequest($user)->deleteJson("$this->baseUrl");
 
         $response->assertStatus(200);
 

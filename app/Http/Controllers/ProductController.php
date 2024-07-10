@@ -10,19 +10,31 @@ use App\Services\Paginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Collection;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
-final class ProductController extends Controller
+final class ProductController extends Controller implements HasMiddleware
 {
     private Paginator $paginator;
 
     public function __construct(Paginator $paginator)
     {
-        $this->middleware(['jwt', 'role:user'])->except(['index', 'show']);
         $this->paginator = $paginator;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('jwt', except: ['index', 'show']),
+            new Middleware('role:user', except: ['index', 'show']),
+        ];
     }
 
     /**
@@ -91,7 +103,7 @@ final class ProductController extends Controller
         $productQuery = Product::query();
         $paginatedResults = $this->paginator->paginate($request, $productQuery);
 
-        return response()->json(ProductResource::collection($paginatedResults), Response::HTTP_OK);
+        return response()->formatted(1, ProductResource::collection($paginatedResults), Response::HTTP_OK);
     }
 
     /**
@@ -162,7 +174,7 @@ final class ProductController extends Controller
     {
         $product = Product::create($request->validated());
 
-        return response()->json(new ProductResource($product), Response::HTTP_OK);
+        return response()->formatted(1, new ProductResource($product), Response::HTTP_OK);
     }
 
     /**
@@ -200,7 +212,7 @@ final class ProductController extends Controller
      */
     public function show(Product $product): JsonResponse
     {
-        return response()->json(new ProductResource($product), Response::HTTP_OK);
+        return response()->formatted(1, new ProductResource($product), Response::HTTP_OK);
     }
 
     /**
@@ -280,7 +292,7 @@ final class ProductController extends Controller
     ): JsonResponse {
         $product->update($request->validated());
 
-        return response()->json(new ProductResource($product), Response::HTTP_OK);
+        return response()->formatted(1, new ProductResource($product), Response::HTTP_OK);
     }
 
     /**
@@ -321,6 +333,6 @@ final class ProductController extends Controller
     {
         $product->delete();
 
-        return response()->json([], Response::HTTP_OK);
+        return response()->formatted(1, [], Response::HTTP_OK);
     }
 }

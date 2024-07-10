@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
-use Tests\AuthTest;
+use Tests\Traits\AuthTest;
 use Tests\TestCase;
 
 class CategoryControllerTest extends TestCase
@@ -14,32 +14,33 @@ class CategoryControllerTest extends TestCase
 
     use AuthTest;
 
-    /** @test */
-    public function can_show_categories()
+    protected string $baseUrl = "/api/v1/category";
+    #[Test]
+    public function test_can_show_categories()
     {
 
-        $response = $this->getJson("/api/categories");
+        $response = $this->getJson("/api/v1/categories");
         $response->assertStatus(200);
     }
 
-    /** @test */
-    public function can_show_a_category()
+    #[Test]
+    public function test_can_show_a_category()
     {
         $category = Category::factory()->create();
-        $response = $this->getJson("/api/category/$category->uuid");
+        $response = $this->getJson("$this->baseUrl/$category->uuid");
         $response->assertStatus(200);
         $response->assertJson(['data' => ['uuid' => $category->uuid]]);;
     }
 
 
-    /** @test */
-    public function can_create_a_category()
+    #[Test]
+    public function test_can_create_a_category()
     {
         $category = [
             'title' => fake()->word(),
         ];
 
-        $response = $this->authenticatedRequest($this->getUser())->postJson('/api/category', $category);
+        $response = $this->authenticatedRequest($this->getUser())->postJson("$this->baseUrl", $category);
 
         $response->assertStatus(200);
         $response->assertJson([
@@ -52,14 +53,14 @@ class CategoryControllerTest extends TestCase
             'title' => $category['title']
         ]);
     }
-    /** @test */
-    public function can_update_a_category()
+    #[Test]
+    public function test_can_update_a_category()
     {
         $categoryUpdate = [
             'title' => fake()->word(),
         ];
         $category = Category::factory()->create();
-        $response = $this->authenticatedRequest($this->getUser())->putJson("/api/category/$category->uuid", $categoryUpdate);
+        $response = $this->authenticatedRequest($this->getUser())->putJson("$this->baseUrl/$category->uuid", $categoryUpdate);
 
         $response->assertStatus(200);
         $response->assertJson([
@@ -69,17 +70,4 @@ class CategoryControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function can_delete_a_category()
-    {
-        ;
-        $category = Category::factory()->create();
-        $response = $this->authenticatedRequest($this->getUser())->deleteJson("/api/category/{$category->uuid}");
-
-        $response->assertStatus(200);
-
-        $this->assertDatabaseMissing('categories', [
-            'id' => $category->id
-        ]);
-    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Traits;
 
 use App\Models\User;
 use App\Services\Auth\AuthService;
@@ -28,7 +28,7 @@ trait AuthTest
         $token = app(AuthService::class)->login($user);
 
         return $this->withHeaders([
-            'Authorization' => 'Bearer ' . (string) $token,
+            'Authorization' => 'Bearer ' . $token->toString(),
             'Accept' => 'application/json',
         ]);
     }

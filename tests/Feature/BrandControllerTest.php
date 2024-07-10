@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Brand;
-use Tests\AuthTest;
+use Tests\Traits\AuthTest;
 use Tests\TestCase;
 
 class BrandControllerTest extends TestCase
@@ -14,32 +14,34 @@ class BrandControllerTest extends TestCase
 
     use AuthTest;
 
-    /** @test */
-    public function can_show_brands()
+    protected string $baseUrl = "/api/v1/brand";
+
+    #[Test]
+    public function test_can_show_brands()
     {
 
-        $response = $this->getJson("/api/brands");
+        $response = $this->getJson("/api/v1/brands");
         $response->assertStatus(200);
     }
 
-    /** @test */
-    public function can_show_a_brand()
+    #[Test]
+    public function test_can_show_a_brand()
     {
         $brand = Brand::factory()->create();
-        $response = $this->getJson("/api/brand/$brand->uuid");
+        $response = $this->getJson("$this->baseUrl/$brand->uuid");
         $response->assertStatus(200);
-        $response->assertJson(['data' => ['uuid' => $brand->uuid]]);;
+        $response->assertJson(['data' => ['uuid' => $brand->uuid]]);
     }
 
 
-    /** @test */
-    public function can_create_a_brand()
+    #[Test]
+    public function test_can_create_a_brand()
     {
         $brand = [
             'title' => fake()->word(),
         ];
 
-        $response = $this->authenticatedRequest($this->getUser())->postJson('/api/brand', $brand);
+        $response = $this->authenticatedRequest($this->getUser())->postJson("$this->baseUrl", $brand);
 
         $response->assertStatus(200);
         $response->assertJson([
@@ -52,14 +54,14 @@ class BrandControllerTest extends TestCase
             'title' => $brand['title']
         ]);
     }
-    /** @test */
-    public function can_update_a_brand()
+    #[Test]
+    public function test_can_update_a_brand()
     {
         $brandUpdate = [
             'title' => fake()->word(),
         ];
         $brand = Brand::factory()->create();
-        $response = $this->authenticatedRequest($this->getUser())->putJson("/api/brand/$brand->uuid", $brandUpdate);
+        $response = $this->authenticatedRequest($this->getUser())->putJson("$this->baseUrl/$brand->uuid", $brandUpdate);
 
         $response->assertStatus(200);
         $response->assertJson([
@@ -69,16 +71,16 @@ class BrandControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function can_delete_a_user()
+    #[Test]
+    public function test_can_delete_a_brand()
     {
         $brand = Brand::factory()->create();
-        $response = $this->authenticatedRequest($this->getUser())->deleteJson("/api/brand/{$brand->uuid}");
+        $response = $this->authenticatedRequest($this->getUser())->deleteJson("$this->baseUrl/{$brand->uuid}");
 
         $response->assertStatus(200);
 
         $this->assertDatabaseMissing('brands', [
-            'id' => $brand->id
+            'uuid' => $brand->uuid
         ]);
     }
 }

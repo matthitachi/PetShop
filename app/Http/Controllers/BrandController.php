@@ -9,25 +9,38 @@ use App\Http\Resources\UserResource;
 use App\Models\Brand;
 use App\Services\Auth\AuthService;
 use App\Services\Paginator;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
-class BrandController extends Controller
+class BrandController extends Controller implements HasMiddleware
 {
+
     private Paginator $paginator;
 
     public function __construct(Paginator $paginator)
     {
-        $this->middleware(['jwt', 'role:user'])->except(['index', 'show']);
         $this->paginator = $paginator;
     }
 
-
+    /**
+     * @inheritDoc
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('jwt', except: ['index', 'show']),
+            new Middleware('role:user', except: ['index', 'show']),
+        ];
+    }
     /**
      * @OA\Get(
      *     path="/api/v1/brands",
@@ -281,4 +294,6 @@ class BrandController extends Controller
 
         return response()->formatted(true, [], Response::HTTP_OK);
     }
+
+
 }

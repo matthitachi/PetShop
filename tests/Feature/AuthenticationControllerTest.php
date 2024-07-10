@@ -11,7 +11,7 @@ class AuthenticationControllerTest extends TestCase
 {
 
 
-    /** @test */
+    #[Test]
     public function can_show_a_user()
     {
         $user = User::factory()->create();
@@ -28,7 +28,7 @@ class AuthenticationControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function can_create_a_user()
     {
         $userData = [

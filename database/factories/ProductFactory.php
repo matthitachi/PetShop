@@ -20,19 +20,33 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $category = Category::factory()->create();
-        $brand = Brand::factory()->create();
-        $file = File::factory()->create();
         return [
             'uuid' => Str::uuid(),
             'title' => fake()->sentence(7),
             'price' => fake()->randomFloat(2, 0, 500),
             'description' => fake()->text(50),
-            'category_uuid' => $category->uuid,
-            'metadata' => json_encode([
-                'brand' => $brand->uuid,
-                'image' => $file->uuid,
-            ]),
         ];
+    }
+
+    public function final(): Factory
+    {
+        return $this->state(function ($attr) {
+            $category = Category::factory()->create();
+            $brand = Brand::factory()->create();
+            $file = File::factory()->create();
+
+            return array_merge(
+                $attr,
+                [
+                    'category_uuid' => $category->uuid,
+                    'metadata' => json_encode(
+                        [
+                            'brand' => $brand->uuid,
+                            'image' => $file->uuid,
+                        ]
+                    ),
+                ]
+            );
+        });
     }
 }
