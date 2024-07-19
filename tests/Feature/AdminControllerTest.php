@@ -3,16 +3,15 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\Traits\AuthTest;
 use Tests\TestCase;
+use Tests\Traits\AuthTest;
 
 class AdminControllerTest extends TestCase
 {
     use AuthTest;
 
-    protected string $baseUrl = "/api/v1/admin";
+    protected string $baseUrl = '/api/v1/admin';
+
     /**
      * A basic feature test example.
      */
@@ -34,7 +33,7 @@ class AdminControllerTest extends TestCase
             'email' => fake()->safeEmail(),
             'address' => fake()->address(),
             'phone_number' => fake()->phoneNumber(),
-            'is_admin' => 1
+            'is_admin' => 1,
         ];
 
         $response = $this->postJson("$this->baseUrl/create", $userData);
@@ -44,14 +43,13 @@ class AdminControllerTest extends TestCase
             'data' => [
                 'first_name' => $userData['first_name'],
                 'email' => $userData['email'],
-            ]
+            ],
         ]);
 
         $this->assertDatabaseHas('users', [
-            'email' => $userData['email']
+            'email' => $userData['email'],
         ]);
     }
-
 
     #[Test]
     public function test_can_login_an_admin()
@@ -68,7 +66,7 @@ class AdminControllerTest extends TestCase
         $response->assertJson(['data' => ['token' => true]]);
         $this->assertDatabaseHas('users', [
             'email' => $userData['email'],
-            'is_admin' => $user->is_admin
+            'is_admin' => $user->is_admin,
         ]);
     }
 
@@ -85,8 +83,6 @@ class AdminControllerTest extends TestCase
 
         $response->assertStatus(401);
     }
-
-
 
     public function test_can_list_users_with_admin()
     {
@@ -117,12 +113,12 @@ class AdminControllerTest extends TestCase
         $user = User::factory()->create();
         $updateData = [
             'first_name' => 'Updated Name',
-                'last_name' => 'last',
-                'password' => 'qwertyiyor',
-                'password_confirmation' => 'qwertyiyor',
-                'address' => 'No 5 cussons street ',
-                'phone_number' => '+44565849955',
-                'email' => 'ab@example.com'
+            'last_name' => 'last',
+            'password' => 'qwertyiyor',
+            'password_confirmation' => 'qwertyiyor',
+            'address' => 'No 5 cussons street ',
+            'phone_number' => '+44565849955',
+            'email' => 'ab@example.com',
         ];
 
         $response = $this->authenticatedRequest($this->getAdmin())->putJson("$this->baseUrl/user-edit/{$user->uuid}", $updateData);
@@ -133,12 +129,12 @@ class AdminControllerTest extends TestCase
                 'uuid' => $user->uuid,
                 'first_name' => 'Updated Name',
                 'last_name' => 'last',
-            ]
+            ],
         ]);
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'first_name' => 'Updated Name'
+            'first_name' => 'Updated Name',
         ]);
     }
 
@@ -152,7 +148,7 @@ class AdminControllerTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertDatabaseMissing('users', [
-            'id' => $user->id
+            'id' => $user->id,
         ]);
     }
 }

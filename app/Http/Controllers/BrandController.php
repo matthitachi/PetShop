@@ -5,25 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Brand\BradCreateRequest;
 use App\Http\Requests\Brand\BrandUpdateRequest;
 use App\Http\Resources\BrandResource;
-use App\Http\Resources\UserResource;
 use App\Models\Brand;
-use App\Services\Auth\AuthService;
 use App\Services\Paginator;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use OpenApi\Annotations as OA;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 class BrandController extends Controller implements HasMiddleware
 {
-
     private Paginator $paginator;
 
     public function __construct(Paginator $paginator)
@@ -32,7 +25,7 @@ class BrandController extends Controller implements HasMiddleware
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public static function middleware(): array
     {
@@ -41,45 +34,55 @@ class BrandController extends Controller implements HasMiddleware
             new Middleware('role:user', except: ['index', 'show']),
         ];
     }
+
     /**
      * @OA\Get(
      *     path="/api/v1/brands",
      *     tags={"Brands"},
+     *
      *     @OA\Parameter(
      *         name="page",
      *         in="query",
      *         description="Page number",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",
      *         description="Number of items per page",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="sortBy",
      *         in="query",
      *         description="Number of items per page",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *      @OA\Parameter(
      *         name="desc",
      *         in="query",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="boolean"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -107,7 +110,7 @@ class BrandController extends Controller implements HasMiddleware
         $brandQuery = Brand::query();
         $paginatedResults = $this->paginator->paginate($request, $brandQuery);
 
-        return response()->formatted(true,BrandResource::collection($paginatedResults), Response::HTTP_OK);
+        return response()->formatted(true, BrandResource::collection($paginatedResults), Response::HTTP_OK);
     }
 
     /**
@@ -115,11 +118,15 @@ class BrandController extends Controller implements HasMiddleware
      *     path="/api/v1/brand",
      *     tags={"Brands"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -129,6 +136,7 @@ class BrandController extends Controller implements HasMiddleware
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -164,13 +172,16 @@ class BrandController extends Controller implements HasMiddleware
      * @OA\Get(
      *     path="/api/v1/brand/{uuid}",
      *     tags={"Brands"},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -203,18 +214,24 @@ class BrandController extends Controller implements HasMiddleware
      *     path="/api/v1/brand/{uuid}",
      *     tags={"Brands"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\RequestBody(
      *          required=true,
+     *
      *          @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -224,6 +241,7 @@ class BrandController extends Controller implements HasMiddleware
      *             )
      *         )
      *    ),
+     *
      *    @OA\Response(
      *         response="200",
      *         description="OK"
@@ -259,13 +277,16 @@ class BrandController extends Controller implements HasMiddleware
      *     path="/api/v1/brand/{uuid}",
      *     tags={"Brands"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -294,6 +315,4 @@ class BrandController extends Controller implements HasMiddleware
 
         return response()->formatted(true, [], Response::HTTP_OK);
     }
-
-
 }

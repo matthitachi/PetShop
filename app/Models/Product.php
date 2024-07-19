@@ -23,8 +23,8 @@ final class Product extends Model
      * @property string $category_uuid
      **/
     use HasFactory;
-    use UuidTrait;
 
+    use UuidTrait;
 
     protected $fillable = ['uuid', 'title', 'price', 'description', 'metadata', 'category_uuid'];
 

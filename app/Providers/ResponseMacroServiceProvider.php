@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Http\Response as HttpResponse;
 
 class ResponseMacroServiceProvider extends ServiceProvider
 {
@@ -19,7 +19,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
                 'data' => $data,
                 'error' => $error,
                 'errors' => $errors,
-//                'trace' => $trace,
+                //                'trace' => $trace,
             ], $status);
         });
     }

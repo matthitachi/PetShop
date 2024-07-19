@@ -25,7 +25,7 @@ class OrderStatusFactory extends Factory
                 'Paid', 'Awaiting shipment',
                 'Out for delivery',
                 'Delivered',
-                'Refunded'
+                'Refunded',
             ][rand(0, 6)],
         ];
     }

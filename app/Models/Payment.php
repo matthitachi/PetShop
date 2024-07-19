@@ -19,8 +19,8 @@ final class Payment extends Model
      * @property \Illuminate\Support\Carbon|null $updated_at
      **/
     use HasFactory;
-    use UuidTrait;
 
+    use UuidTrait;
 
     protected $fillable = ['type', 'details'];
 

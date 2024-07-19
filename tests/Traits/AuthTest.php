@@ -6,12 +6,11 @@ use App\Models\User;
 use App\Services\Auth\AuthService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 trait AuthTest
 {
-    use DatabaseTransactions;
     use DatabaseMigrations;
+    use DatabaseTransactions;
 
     protected function getAdmin()
     {
@@ -28,7 +27,7 @@ trait AuthTest
         $token = app(AuthService::class)->login($user);
 
         return $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token->toString(),
+            'Authorization' => 'Bearer '.$token->toString(),
             'Accept' => 'application/json',
         ]);
     }

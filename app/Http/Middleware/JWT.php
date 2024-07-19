@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use App\Services\Auth\JWTService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\User;
 
 class JWT
 {
@@ -26,7 +26,7 @@ class JWT
     public function handle(Request $request, Closure $next): Response
     {
         $token = $request->bearerToken();
-        if (!$token) {
+        if (! $token) {
             return $this->unauthorizedResponse('Token not provided');
         }
 
@@ -36,7 +36,7 @@ class JWT
             return $this->unauthorizedResponse('Invalid token');
         }
 
-        if (!$this->jwtService->validateToken($jwtToken) || $jwtToken->isExpired(new \DateTimeImmutable())) {
+        if (! $this->jwtService->validateToken($jwtToken) || $jwtToken->isExpired(new \DateTimeImmutable())) {
             return $this->unauthorizedResponse('Token is invalid or expired');
         }
 
@@ -48,7 +48,7 @@ class JWT
             ->hasToken($tokenId)
             ->first();
 
-        if (!$user) {
+        if (! $user) {
             return $this->unauthorizedResponse('User not found');
         }
 
@@ -59,9 +59,6 @@ class JWT
 
     /**
      * Return a standardized unauthorized response.
-     *
-     * @param string $message
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     private function unauthorizedResponse(string $message): Response
     {
@@ -71,4 +68,3 @@ class JWT
         ], Response::HTTP_UNAUTHORIZED);
     }
 }
-

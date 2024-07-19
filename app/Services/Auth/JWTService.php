@@ -9,7 +9,6 @@ use Lcobucci\JWT\Encoding\ChainedFormatter;
 use Lcobucci\JWT\Encoding\JoseEncoder;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
-use Lcobucci\JWT\Token;
 use Lcobucci\JWT\Token\Builder;
 use Lcobucci\JWT\Token\InvalidTokenStructure;
 use Lcobucci\JWT\Token\Parser;
@@ -21,8 +20,6 @@ use Lcobucci\JWT\Validation\Validator;
 class JWTService
 {
     /**
-     * @param User $user
-     * @return UnencryptedToken
      * @throws \Exception
      */
     public function issueToken(User $user): UnencryptedToken
@@ -36,7 +33,7 @@ class JWTService
         if ($path === '') {
             throw new \InvalidArgumentException('file path is empty');
         }
-        if ( ! file_exists($path)) {
+        if (! file_exists($path)) {
             throw new \InvalidArgumentException('file not found: ');
         }
 
@@ -46,13 +43,14 @@ class JWTService
             InMemory::base64Encoded(config('jwt')['KEY'])
         );
         $now = new DateTimeImmutable();
+
         return $tokenBuilder
             ->issuedBy(config('app.url'))
             ->permittedFor(config('app.url'))
             ->identifiedBy((string) $user->id)
             ->issuedAt($now)
             ->expiresAt(
-                $now->modify('+ ' . config('jwt')['TTL'] . ' seconds')
+                $now->modify('+ '.config('jwt')['TTL'].' seconds')
             )
             ->withClaim('uuid', $user->uuid)
             ->withClaim('role', $user->is_admin ? 'admin' : 'user')
@@ -60,10 +58,6 @@ class JWTService
 
     }
 
-    /**
-     * @param string $token
-     * @return UnencryptedToken
-     */
     public function parseToken(string $token): UnencryptedToken
     {
         if ($token === '') {
@@ -73,14 +67,10 @@ class JWTService
         if (! $parsedToken instanceof UnencryptedToken) {
             throw InvalidTokenStructure::missingClaimsPart();
         }
+
         return $parsedToken;
     }
 
-
-    /**
-     * @param UnencryptedToken $token
-     * @return bool
-     */
     public function validateToken(UnencryptedToken $token): bool
     {
         $validator = new Validator();

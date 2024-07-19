@@ -2,20 +2,17 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\Traits\AuthTest;
 use Tests\TestCase;
+use Tests\Traits\AuthTest;
 
 class UserControllerTest extends TestCase
 {
     /**
      * A basic feature test example.
      */
-
     use AuthTest;
-    protected string $baseUrl = "/api/v1/user";
+
+    protected string $baseUrl = '/api/v1/user';
 
     public function test_example(): void
     {
@@ -43,11 +40,11 @@ class UserControllerTest extends TestCase
             'data' => [
                 'first_name' => $userData['first_name'],
                 'email' => $userData['email'],
-            ]
+            ],
         ]);
 
         $this->assertDatabaseHas('users', [
-            'email' => $userData['email']
+            'email' => $userData['email'],
         ]);
     }
 
@@ -66,7 +63,7 @@ class UserControllerTest extends TestCase
         $response->assertJson(['data' => ['token' => true]]);
         $this->assertDatabaseHas('users', [
             'email' => $userData['email'],
-            'is_admin' => $user->is_admin
+            'is_admin' => $user->is_admin,
         ]);
     }
 
@@ -83,9 +80,10 @@ class UserControllerTest extends TestCase
                 'uuid' => $user->uuid,
                 'first_name' => $user->first_name,
                 'email' => $user->email,
-            ]
+            ],
         ]);
     }
+
     #[Test]
     public function test_can_list_user_orders()
     {
@@ -106,7 +104,7 @@ class UserControllerTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertDatabaseMissing('users', [
-            'id' => $user->id
+            'id' => $user->id,
         ]);
     }
 }

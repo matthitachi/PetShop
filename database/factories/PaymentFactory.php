@@ -30,7 +30,7 @@ class PaymentFactory extends Factory
     {
         if ($type == 'credit_card') {
             return [
-                'holder_name' => fake()->firstName() . ' ' . fake()->lastName(),
+                'holder_name' => fake()->firstName().' '.fake()->lastName(),
                 'number' => fake()->creditCardNumber(),
                 'ccv' => fake()->randomNumber(3),
                 'expire_date' => fake()->creditCardExpirationDate(),

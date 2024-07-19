@@ -33,6 +33,7 @@ final class User extends Authenticatable
      * @property string|null $last_login
      **/
     use HasFactory;
+
     use Notifiable;
     use UuidTrait;
 
@@ -65,11 +66,11 @@ final class User extends Authenticatable
         'remember_token',
     ];
 
-
     public function setIsMarketingAttribute($value)
     {
         $this->attributes['is_marketing'] = $value ?? 0;
     }
+
     public function getRouteKeyName(): string
     {
         return 'uuid';
@@ -96,8 +97,6 @@ final class User extends Authenticatable
             $q->where('unique_id', '=', $tokenId);
         });
     }
-
-
 
     protected static function boot()
     {

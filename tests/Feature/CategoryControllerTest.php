@@ -3,23 +3,23 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
-use Tests\Traits\AuthTest;
 use Tests\TestCase;
+use Tests\Traits\AuthTest;
 
 class CategoryControllerTest extends TestCase
 {
     /**
      * A basic feature test example.
      */
-
     use AuthTest;
 
-    protected string $baseUrl = "/api/v1/category";
+    protected string $baseUrl = '/api/v1/category';
+
     #[Test]
     public function test_can_show_categories()
     {
 
-        $response = $this->getJson("/api/v1/categories");
+        $response = $this->getJson('/api/v1/categories');
         $response->assertStatus(200);
     }
 
@@ -29,9 +29,8 @@ class CategoryControllerTest extends TestCase
         $category = Category::factory()->create();
         $response = $this->getJson("$this->baseUrl/$category->uuid");
         $response->assertStatus(200);
-        $response->assertJson(['data' => ['uuid' => $category->uuid]]);;
+        $response->assertJson(['data' => ['uuid' => $category->uuid]]);
     }
-
 
     #[Test]
     public function test_can_create_a_category()
@@ -46,13 +45,14 @@ class CategoryControllerTest extends TestCase
         $response->assertJson([
             'data' => [
                 'title' => $category['title'],
-            ]
+            ],
         ]);
 
         $this->assertDatabaseHas('categories', [
-            'title' => $category['title']
+            'title' => $category['title'],
         ]);
     }
+
     #[Test]
     public function test_can_update_a_category()
     {
@@ -66,8 +66,7 @@ class CategoryControllerTest extends TestCase
         $response->assertJson([
             'data' => [
                 'title' => $categoryUpdate['title'],
-            ]
+            ],
         ]);
     }
-
 }

@@ -3,14 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AuthenticationControllerTest extends TestCase
 {
-
-
     #[Test]
     public function can_show_a_user()
     {
@@ -24,7 +20,7 @@ class AuthenticationControllerTest extends TestCase
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-            ]
+            ],
         ]);
     }
 
@@ -44,13 +40,11 @@ class AuthenticationControllerTest extends TestCase
             'data' => [
                 'name' => $userData['name'],
                 'email' => $userData['email'],
-            ]
+            ],
         ]);
 
         $this->assertDatabaseHas('users', [
-            'email' => $userData['email']
+            'email' => $userData['email'],
         ]);
     }
-
-
 }

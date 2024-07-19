@@ -19,6 +19,7 @@ use Throwable;
 class AdminController extends Controller
 {
     private AuthService $service;
+
     private Paginator $paginator;
 
     public function __construct(AuthService $service, Paginator $paginator)
@@ -31,11 +32,15 @@ class AdminController extends Controller
      * @OA\Post(
      *     path="/api/v1/admin/create",
      *     tags={"Admin"},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="first_name",
      *                     type="string",
@@ -81,6 +86,7 @@ class AdminController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -109,7 +115,7 @@ class AdminController extends Controller
     {
         $validated = $request->validated();
         try {
-            $resource =  $this->service->create($validated, 1);
+            $resource = $this->service->create($validated, 1);
 
             return \response()->formatted(true,
                 new AdminResource($resource), Response::HTTP_OK);
@@ -122,11 +128,15 @@ class AdminController extends Controller
      * @OA\Post(
      *     path="/api/v1/admin/login",
      *     tags={"Admin"},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="email",
      *                     type="string",
@@ -141,6 +151,7 @@ class AdminController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -165,11 +176,11 @@ class AdminController extends Controller
      */
     public function login(UserLoginRequest $request): JsonResponse
     {
-        if ( !Auth::attempt($request->safe()->only('email', 'password'))) {
+        if (! Auth::attempt($request->safe()->only('email', 'password'))) {
             return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
         }
         $user = User::where('id', Auth::id())->where('is_admin', 1)->first();
-        if(!$user){
+        if (! $user) {
             return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
         }
         try {
@@ -177,7 +188,8 @@ class AdminController extends Controller
         } catch (\ErrorException|Throwable $e) {
             return \response()->formatted(0, [], Response::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage(), [], $e->getTrace());
         }
-        return \response()->formatted(true,['token' => $token->toString()], Response::HTTP_OK);
+
+        return \response()->formatted(true, ['token' => $token->toString()], Response::HTTP_OK);
 
     }
 
@@ -189,6 +201,7 @@ class AdminController extends Controller
      * @OA\Get(
      *     path="/api/v1/admin/logout",
      *     tags={"Admin"},
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -211,7 +224,8 @@ class AdminController extends Controller
      *     )
      * )
      */
-    public function logout(Request $request): JsonResponse {
+    public function logout(Request $request): JsonResponse
+    {
         $token = $request->bearerToken();
         if (is_null($token)) {
             return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
@@ -222,7 +236,7 @@ class AdminController extends Controller
             return \response()->formatted(0, [], Response::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage(), [], $e->getTrace());
         }
 
-        return \response()->formatted(true,[], Response::HTTP_OK);
+        return \response()->formatted(true, [], Response::HTTP_OK);
     }
 
     /**
@@ -230,91 +244,112 @@ class AdminController extends Controller
      *     path="/api/v1/admin/user-listing",
      *     tags={"Admin"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(
      *         name="page",
      *         in="query",
      *         description="Page number",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",
      *         description="Number of items per page",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="sortBy",
      *         in="query",
      *         description="Number of items per page",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *      @OA\Parameter(
      *         name="desc",
      *         in="query",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="boolean"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="first_name",
      *         in="query",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="email",
      *         in="query",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="phone",
      *         in="query",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="address",
      *         in="query",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="created_at",
      *         in="query",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="is_marketing",
      *         in="query",
      *         required=false,
+     *
      *     @OA\Schema(
      *         type="string",
      *         enum={"0", "1"},
      *         description="Select an option",
      *       ),
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -352,7 +387,7 @@ class AdminController extends Controller
         }
         $paginatedUsers = $this->paginator->paginate($request, $userQuery);
 
-        return response()->formatted(true,UserResource::collection($paginatedUsers), Response::HTTP_OK);
+        return response()->formatted(true, UserResource::collection($paginatedUsers), Response::HTTP_OK);
     }
 
     /**
@@ -360,18 +395,24 @@ class AdminController extends Controller
      *     path="/api/v1/admin/user-listing/{uuid}",
      *     tags={"Admin"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\RequestBody(
      *          required=true,
+     *
      *          @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="first_name",
      *                     type="string",
@@ -417,6 +458,7 @@ class AdminController extends Controller
      *             )
      *         )
      *    ),
+     *
      *    @OA\Response(
      *         response="200",
      *         description="OK"
@@ -446,7 +488,7 @@ class AdminController extends Controller
 
         $user->update($params);
 
-        return response()->formatted(true,new UserResource($user), Response::HTTP_OK);
+        return response()->formatted(true, new UserResource($user), Response::HTTP_OK);
     }
 
     /**
@@ -454,13 +496,16 @@ class AdminController extends Controller
      *     path="/api/v1/admin/user-listing/{uuid}",
      *     tags={"Admin"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -487,7 +532,6 @@ class AdminController extends Controller
     {
         $user->delete();
 
-        return response()->formatted(true,[], Response::HTTP_OK);
+        return response()->formatted(true, [], Response::HTTP_OK);
     }
-
 }

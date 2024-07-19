@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\CategoryCreateRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
-use App\Http\Resources\BrandResource;
 use App\Http\Resources\CategoryResource;
 use App\Models\Brand;
 use App\Models\Category;
@@ -12,11 +11,9 @@ use App\Services\Paginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use OpenApi\Annotations as OA;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 final class CategoryController extends Controller implements HasMiddleware
@@ -29,7 +26,7 @@ final class CategoryController extends Controller implements HasMiddleware
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public static function middleware(): array
     {
@@ -43,41 +40,50 @@ final class CategoryController extends Controller implements HasMiddleware
      * @OA\Get(
      *     path="/api/v1/categories",
      *     tags={"Categories"},
+     *
      *     @OA\Parameter(
      *         name="page",
      *         in="query",
      *         description="Page number",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",
      *         description="Number of items per page",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="sortBy",
      *         in="query",
      *         description="Number of items per page",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *      @OA\Parameter(
      *         name="desc",
      *         in="query",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="boolean"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -113,11 +119,15 @@ final class CategoryController extends Controller implements HasMiddleware
      *     path="/api/v1/category",
      *     tags={"Categories"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -127,6 +137,7 @@ final class CategoryController extends Controller implements HasMiddleware
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -162,13 +173,16 @@ final class CategoryController extends Controller implements HasMiddleware
      * @OA\Get(
      *     path="/api/v1/category/{uuid}",
      *     tags={"Categories"},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -201,18 +215,24 @@ final class CategoryController extends Controller implements HasMiddleware
      *     path="/api/v1/category/{uuid}",
      *     tags={"Categories"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\RequestBody(
      *          required=true,
+     *
      *          @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -222,6 +242,7 @@ final class CategoryController extends Controller implements HasMiddleware
      *             )
      *         )
      *    ),
+     *
      *    @OA\Response(
      *         response="200",
      *         description="OK"
@@ -257,13 +278,16 @@ final class CategoryController extends Controller implements HasMiddleware
      *     path="/api/v1/brand/{uuid}",
      *     tags={"Categories"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"

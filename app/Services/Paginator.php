@@ -5,7 +5,6 @@ namespace App\Services;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator as ParentPaginator;
 
 final class Paginator
 {

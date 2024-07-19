@@ -5,14 +5,11 @@ namespace App\Services\Auth;
 use App\Http\Resources\AdminResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Services\Auth\JWTService;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Lcobucci\JWT\JwtFacade;
 use Lcobucci\JWT\Token;
-use Lcobucci\JWT\UnencryptedToken;
 
 final class AuthService
 {
@@ -24,9 +21,8 @@ final class AuthService
     }
 
     /**
-     * @param array $params
-     * @param int $isAdmin
-     * @return JsonResource
+     * @param  int  $isAdmin
+     *
      * @throws \ErrorException
      */
     public function create(array $params, $isAdmin = 0): JsonResource
@@ -45,7 +41,7 @@ final class AuthService
             ]);
 
             DB::commit();
-            $resource =  $isAdmin ? (new AdminResource($user)): (new UserResource($user));
+            $resource = $isAdmin ? (new AdminResource($user)) : (new UserResource($user));
             $resource->additional(['token' => $token->toString()]);
 
             return $resource;
@@ -59,8 +55,6 @@ final class AuthService
     }
 
     /**
-     * @param User $user
-     * @return Token
      * @throws \ErrorException
      */
     public function login(User $user): Token
@@ -112,5 +106,4 @@ final class AuthService
             throw new \ErrorException('Error');
         }
     }
-
 }

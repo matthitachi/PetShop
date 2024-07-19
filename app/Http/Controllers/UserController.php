@@ -31,11 +31,15 @@ class UserController extends Controller
      * @OA\Post(
      *     path="/api/v1/user/create",
      *     tags={"User"},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="first_name",
      *                     type="string",
@@ -81,6 +85,7 @@ class UserController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -110,7 +115,7 @@ class UserController extends Controller
 
         $validated = $request->validated();
         try {
-            $resource =  $this->service->create($validated);
+            $resource = $this->service->create($validated);
 
             return \response()->formatted(true,
                 new UserResource($resource), Response::HTTP_OK);
@@ -123,11 +128,15 @@ class UserController extends Controller
      * @OA\Post(
      *     path="/api/v1/user/login",
      *     tags={"User"},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="email",
      *                     type="string",
@@ -142,6 +151,7 @@ class UserController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -167,11 +177,11 @@ class UserController extends Controller
     public function login(UserLoginRequest $request): JsonResponse
     {
 
-        if ( !Auth::attempt($request->safe()->only('email', 'password'))) {
+        if (! Auth::attempt($request->safe()->only('email', 'password'))) {
             return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
         }
         $user = User::query()->where('id', Auth::id())->where('is_admin', 0)->first();
-        if(!$user){
+        if (! $user) {
             return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
         }
         try {
@@ -190,6 +200,7 @@ class UserController extends Controller
      *     path="/api/v1/user/logout",
      *     tags={"User"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -212,7 +223,8 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function logout(Request $request): JsonResponse {
+    public function logout(Request $request): JsonResponse
+    {
         $token = $request->bearerToken();
         if (is_null($token)) {
             return response()->formatted(0, [], Response::HTTP_UNAUTHORIZED, 'Failed to authenticate user');
@@ -231,6 +243,7 @@ class UserController extends Controller
      *     path="/api/v1/user",
      *     tags={"User"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -257,7 +270,7 @@ class UserController extends Controller
     {
         $user = User::whereId(Auth::id())->firstOrFail();
 
-        return  \response()->formatted(true, new UserResource($user));
+        return \response()->formatted(true, new UserResource($user));
     }
 
     /**
@@ -265,11 +278,15 @@ class UserController extends Controller
      *     path="/api/v1/user/edit",
      *     tags={"User"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\RequestBody(
      *          required=true,
+     *
      *          @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="first_name",
      *                     type="string",
@@ -315,6 +332,7 @@ class UserController extends Controller
      *             )
      *         )
      *    ),
+     *
      *    @OA\Response(
      *         response="200",
      *         description="OK"
@@ -343,7 +361,7 @@ class UserController extends Controller
         $user = User::whereId(Auth::id())->firstOrFail();
         $user->update($request->validated());
 
-        return response()->formatted(true, new UserResource($user), Response::HTTP_OK );
+        return response()->formatted(true, new UserResource($user), Response::HTTP_OK);
     }
 
     /**
@@ -351,6 +369,7 @@ class UserController extends Controller
      *     path="/api/v1/user",
      *     tags={"User"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -378,20 +397,23 @@ class UserController extends Controller
         $user = User::whereId(Auth::id())->firstOrFail();
         $user->delete();
 
-        return response()->formatted(true, [], Response::HTTP_OK );
+        return response()->formatted(true, [], Response::HTTP_OK);
     }
 
     /**
      * @OA\Post(
      *     path="/api/v1/user/forgot-password",
      *     tags={"User"},
+     *
      *     @OA\Parameter(
      *         name="email",
      *         in="query",
      *         description="User email",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -425,34 +447,41 @@ class UserController extends Controller
         $user = User::where('email', $request->email)->firstOrFail();
         $token = Password::createToken($user);
 
-        return response()->formatted(true, ['token' => $token], Response::HTTP_OK );
+        return response()->formatted(true, ['token' => $token], Response::HTTP_OK);
     }
 
     /**
      * @OA\Post(
      *     path="/api/v1/user/reset-password-token",
      *     tags={"User"},
+     *
      *     @OA\Parameter(
      *         name="token",
      *         in="query",
      *         description="User reset token",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Parameter(
      *         name="email",
      *         in="query",
      *         description="User email",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Parameter(
      *         name="password",
      *         in="query",
      *         description="User password",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -491,12 +520,13 @@ class UserController extends Controller
         );
 
         if ($response === Password::PASSWORD_RESET) {
-            return response()->formatted(true, ['message' => 'Password has been successfully updated'], Response::HTTP_OK );
+            return response()->formatted(true, ['message' => 'Password has been successfully updated'], Response::HTTP_OK);
         }
         if ($response === Password::INVALID_TOKEN) {
-            return response()->formatted(true, ['message' => 'Invalid or expired token'], Response::HTTP_OK );
+            return response()->formatted(true, ['message' => 'Invalid or expired token'], Response::HTTP_OK);
         }
-        return response()->formatted(true, ['message' => 'Unable to reset password.'], Response::HTTP_BAD_REQUEST );
+
+        return response()->formatted(true, ['message' => 'Unable to reset password.'], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -504,41 +534,50 @@ class UserController extends Controller
      *     path="/api/v1/user/orders",
      *     tags={"User"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(
      *         name="page",
      *         in="query",
      *         description="Page number",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",
      *         description="Number of items per page",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="sortBy",
      *         in="query",
      *         description="Number of items per page",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *      @OA\Parameter(
      *         name="desc",
      *         in="query",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="boolean"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"

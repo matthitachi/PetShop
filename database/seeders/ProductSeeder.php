@@ -15,12 +15,12 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-            Product::factory()->count(50)->create([
-                'category_uuid' => Category::inRandomOrder()->first()->uuid,
-                'metadata' => json_encode([
-                    'brand' => Brand::inRandomOrder()->first()->uuid,
-                    'image' => File::inRandomOrder()->first()->uuid,
-                ]),
-            ]);
+        Product::factory()->count(50)->create([
+            'category_uuid' => Category::inRandomOrder()->first()->uuid,
+            'metadata' => json_encode([
+                'brand' => Brand::inRandomOrder()->first()->uuid,
+                'image' => File::inRandomOrder()->first()->uuid,
+            ]),
+        ]);
     }
 }

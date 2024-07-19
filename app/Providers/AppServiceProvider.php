@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Services\Auth\AuthService;
 use App\Services\Auth\JWTService;
-use App\Services\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

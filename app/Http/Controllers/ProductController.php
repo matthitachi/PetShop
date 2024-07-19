@@ -12,9 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Collection;
 use OpenApi\Annotations as OA;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 final class ProductController extends Controller implements HasMiddleware
@@ -27,7 +25,7 @@ final class ProductController extends Controller implements HasMiddleware
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public static function middleware(): array
     {
@@ -41,41 +39,50 @@ final class ProductController extends Controller implements HasMiddleware
      * @OA\Get(
      *     path="/api/v1/product",
      *     tags={"Products"},
+     *
      *     @OA\Parameter(
      *         name="page",
      *         in="query",
      *         description="Page number",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",
      *         description="Number of items per page",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="sortBy",
      *         in="query",
      *         description="Number of items per page",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *      @OA\Parameter(
      *         name="desc",
      *         in="query",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="boolean"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -111,11 +118,15 @@ final class ProductController extends Controller implements HasMiddleware
      *     path="/api/v1/product",
      *     tags={"Products"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                   property="category_uuid",
      *                   description="Category UUID parameter",
@@ -146,6 +157,7 @@ final class ProductController extends Controller implements HasMiddleware
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -181,13 +193,16 @@ final class ProductController extends Controller implements HasMiddleware
      * @OA\Get(
      *     path="/api/v1/product/{uuid}",
      *     tags={"Products"},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -220,18 +235,24 @@ final class ProductController extends Controller implements HasMiddleware
      *     path="/api/v1/product/{uuid}",
      *     tags={"Products"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                   property="category_uuid",
      *                   description="Category UUID parameter",
@@ -262,6 +283,7 @@ final class ProductController extends Controller implements HasMiddleware
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -300,13 +322,16 @@ final class ProductController extends Controller implements HasMiddleware
      *     path="/api/v1/product/{uuid}",
      *     tags={"Products"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="OK"

@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\OrderStatus;
 use App\Models\Payment;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -45,5 +44,4 @@ class OrderFactory extends Factory
             'amount' => fake()->randomFloat(2, 10, 5000),
         ];
     }
-
 }

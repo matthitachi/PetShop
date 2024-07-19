@@ -21,8 +21,8 @@ final class Post extends Model
      * @property \Illuminate\Support\Carbon|null $updated_at
      **/
     use HasFactory;
-    use UuidTrait;
 
+    use UuidTrait;
 
     public function getRouteKeyName(): string
     {

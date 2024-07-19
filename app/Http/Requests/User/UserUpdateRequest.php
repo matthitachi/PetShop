@@ -31,5 +31,4 @@ final class UserUpdateRequest extends FormRequest
             'is_marketing' => 'boolean|nullable',
         ];
     }
-
 }

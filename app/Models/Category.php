@@ -9,18 +9,19 @@ use Illuminate\Support\Str;
 
 final class Category extends Model
 {
-/**
-* App\Models\Category.
-*
-* @property int $id
-* @property string $uuid
-* @property string $title
-* @property string $slug
-* @property \Illuminate\Support\Carbon|null $created_at
-* @property \Illuminate\Support\Carbon|null $updated_at
- *
- **/
+    /**
+     * App\Models\Category.
+     *
+     * @property int $id
+     * @property string $uuid
+     * @property string $title
+     * @property string $slug
+     * @property \Illuminate\Support\Carbon|null $created_at
+     * @property \Illuminate\Support\Carbon|null $updated_at
+     *
+     **/
     use HasFactory;
+
     use UuidTrait;
 
     protected $fillable = ['title'];

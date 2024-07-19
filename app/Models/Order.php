@@ -27,12 +27,12 @@ final class Order extends Model
      * @property int $order_status_id
      * @property int $payment_id
      **/
-
     use HasFactory;
+
     use UuidTrait;
 
-
     protected $fillable = ['order_status_id', 'payment_id', 'products', 'address', 'amount'];
+
     protected $casts = [
         'products' => 'array',
     ];

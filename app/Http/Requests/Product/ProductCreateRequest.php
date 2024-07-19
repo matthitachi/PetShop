@@ -14,7 +14,6 @@ final class ProductCreateRequest extends FormRequest
         return true;
     }
 
-
     public function rules(): array
     {
         return [
@@ -22,7 +21,7 @@ final class ProductCreateRequest extends FormRequest
             'title' => 'required|string|unique:products,title',
             'price' => 'required|numeric',
             'description' => 'required',
-            'metadata' => 'required'
+            'metadata' => 'required',
         ];
     }
 }
